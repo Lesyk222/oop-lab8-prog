@@ -16,8 +16,8 @@ CExceptions::~CExceptions() {}
 CBadAlloc::CBadAlloc() : CExceptions("Error with allocating memory!") {}
 CBadAlloc::CBadAlloc(const char* msg) : CExceptions(msg) {}
 
-CBadMaxMin::CBadMaxMin() : CExceptions("Error! Multiset is empty!") {}
-CBadMaxMin::CBadMaxMin(const char* msg) : CExceptions(msg) {}
+CEmptyMultiset::CEmptyMultiset() : CExceptions("Error! Multiset is empty!") {}
+CEmptyMultiset::CEmptyMultiset(const char* msg) : CExceptions(msg) {}
 
 CBadDelete::CBadDelete() : CExceptions("Error! Index is out of range!") {}
 CBadDelete::CBadDelete(const char* msg) : CExceptions(msg) {}

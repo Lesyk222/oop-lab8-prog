@@ -15,12 +15,15 @@ CMultiSet::CMultiSet(int capacity)
 CMultiSet::CMultiSet(const CMultiSet& other) {
 	size = other.size;
 	values = new int[size];
+	if (!values) {
+		throw CBadAlloc();
+	}
 	for (int i = 0; i < size; i++) {
 		values[i] = other.values[i];
 	}
 }
 
-CMultiSet::CMultiSet(CMultiSet&& other) {
+CMultiSet::CMultiSet(CMultiSet&& other) noexcept {
 	size = other.size;
 	values = other.values;
 	other.size = 0;
@@ -31,26 +34,26 @@ CMultiSet::~CMultiSet() {
 	delete[] values;
 }
 
-int CMultiSet::getElement(int index) const {
+int CMultiSet::getElement(int index) const noexcept {
 	return values[index];
 }
 
-int CMultiSet::countOfCertainElement(int value) const {
+int CMultiSet::countOfCertainElement(int value) const noexcept {
 	int count = 0;
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size; i++) {	
 		if (values[i] == value)
 			count++;
 	}
 	return count;
 }
 
-int CMultiSet::cardinality() const {
+int CMultiSet::cardinality() const noexcept {
 	return size;
 }
 
 int CMultiSet::findMax() const {
 	if (size == 0) {
-		throw CBadMaxMin();
+		throw CEmptyMultiset();
 	}
 	else {
 		int max = values[0];
@@ -65,7 +68,7 @@ int CMultiSet::findMax() const {
 
 int CMultiSet::findMin() const {
 	if (size == 0) {
-		throw CBadMaxMin();
+		throw CEmptyMultiset();
 	}
 	else {
 		int min = values[0];
@@ -138,7 +141,7 @@ void CMultiSet::readArray() {
 	}
 }
 
-CMultiSet CMultiSet::operator+(const CMultiSet& other) const {
+CMultiSet CMultiSet::operator+(const CMultiSet& other) const noexcept {
 	CMultiSet multiSet(0);
 	for (int i = 0; i < size; i++) {
 		multiSet.addElement(values[i]);
@@ -149,7 +152,7 @@ CMultiSet CMultiSet::operator+(const CMultiSet& other) const {
 	return multiSet;
 }
 
-CMultiSet CMultiSet::operator-(const CMultiSet& other) const {
+CMultiSet CMultiSet::operator-(const CMultiSet& other) const noexcept {
 	CMultiSet multiSet(0);
 	int currentElement;
 	for (int i = 0; i < size; i++) {
@@ -168,7 +171,7 @@ CMultiSet CMultiSet::operator-(const CMultiSet& other) const {
 	return multiSet;
 }
 
-CMultiSet CMultiSet::operator/(const CMultiSet& other) const {
+CMultiSet CMultiSet::operator/(const CMultiSet& other) const noexcept {
 	CMultiSet multiSet(0);
 	int currentElement;
 	for (int i = 0; i < size; i++) {
@@ -190,13 +193,16 @@ CMultiSet CMultiSet::operator/(const CMultiSet& other) const {
 CMultiSet& CMultiSet::operator=(const CMultiSet& other) {
 	size = other.size;
 	values = new int[size];
+	if (!values) {
+		throw CBadAlloc();
+	}
 	for (int i = 0; i < size; i++) {
 		values[i] = other.values[i];
 	}
 	return *this;
 }
 
-CMultiSet& CMultiSet::operator=(CMultiSet&& other) {
+CMultiSet& CMultiSet::operator=(CMultiSet&& other) noexcept {
 	size = other.size;
 	values = other.values;
 	other.size = 0;
@@ -204,12 +210,15 @@ CMultiSet& CMultiSet::operator=(CMultiSet&& other) {
 	return *this;
 }
 
-istream& operator>> (istream& input, CMultiSet& other) {
+istream& operator>> (istream& input, CMultiSet& other) noexcept {
 	other.readArray();
 	return input;
 }
 
 ostream& operator<< (ostream& output, const CMultiSet& other) {
+	if (other.size == 0) {
+		throw CEmptyMultiset();
+	}
 	for (int i = 0; i < other.size; i++) {
 		output << other.values[i] << " ";
 	}

@@ -19,11 +19,11 @@ class CBadAlloc : public CExceptions
 	 CBadAlloc(const char* msg);
 };
 
-class CBadMaxMin : public CExceptions
+class CEmptyMultiset : public CExceptions
 {
  public:
-	CBadMaxMin();
-	CBadMaxMin(const char* msg);
+	CEmptyMultiset();
+	CEmptyMultiset(const char* msg);
 };
 
 class CBadDelete : public CExceptions
